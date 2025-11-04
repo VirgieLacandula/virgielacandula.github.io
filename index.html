@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Secret Message Just For You</title>
+    <!-- Load Tailwind CSS for beautiful styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles */
+        .page {
+            /* Sets all pages to full screen and centered */
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: opacity 0.5s ease-in-out;
+            background-color: #f7f3f1; /* Light blush background */
+        }
+        /* Style for the big SORRY text */
+        .sorry-text {
+            font-size: 6rem; /* Large size */
+            font-weight: 900;
+            color: #ef4444; /* Red accent */
+            text-shadow: 4px 4px 0 #fee2e2; /* Simple 3D effect */
+            letter-spacing: -3px;
+        }
+        /* Mobile adjustment for the SORRY text */
+        @media (max-width: 640px) {
+            .sorry-text {
+                font-size: 4rem;
+                letter-spacing: -1px;
+            }
+        }
+        /* Styling for the disabled button */
+        .disabled-button {
+            cursor: not-allowed;
+            pointer-events: none; /* Prevents ALL click events */
+            opacity: 0.5;
+            filter: grayscale(100%);
+        }
+    </style>
+</head>
+<body class="font-sans">
+
+    <!-- JavaScript to handle page transitions -->
+    <script>
+        // Function to hide the current page and show the next one
+        function showPage(currentPageId, nextPageId) {
+            const currentPage = document.getElementById(currentPageId);
+            const nextPage = document.getElementById(nextPageId);
+
+            if (currentPage) {
+                currentPage.style.display = 'none';
+            }
+            if (nextPage) {
+                nextPage.style.display = 'flex';
+                // Scroll to top for long content like the letter
+                if (nextPageId === 'letter-page') {
+                    nextPage.scrollTop = 0;
+                }
+            } else {
+                console.error("Target page not found:", nextPageId);
+            }
+        }
+    </script>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- SCREEN 1: STATIC LOGIN PAGE (Initial View) -->
+    <!-- ---------------------------------------------------- -->
+    <section id="login-page" class="page flex">
+        <div class="p-8 max-w-sm w-full bg-white shadow-xl rounded-xl border border-gray-200">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Welcome Back</h2>
+            <p class="text-sm text-gray-500 mb-8">Please log in to receive a very special message.</p>
+            
+            <form onsubmit="event.preventDefault(); showPage('login-page', 'photo-page');">
+                <div class="mb-4">
+                    <label for="username" class="block text-left text-sm font-medium text-gray-700 mb-1">Username</label>
+                    <input type="text" id="username" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-pink-500 focus:border-pink-500" placeholder="Enter your username">
+                </div>
+                <div class="mb-6">
+                    <label for="password" class="block text-left text-sm font-medium text-gray-700 mb-1">Password</label>
+                    <input type="password" id="password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-pink-500 focus:border-pink-500" placeholder="••••••••">
+                </div>
+                
+                <button type="submit" class="w-full bg-pink-500 text-white py-2.5 rounded-lg font-semibold hover:bg-pink-600 transition duration-300 shadow-md">
+                    Log In
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- SCREEN 2: PICTURE REVEAL PAGE -->
+    <!-- ---------------------------------------------------- -->
+    <section id="photo-page" class="page hidden" style="background-color: #ffe4e6;"> <!-- Light pink background -->
+        <div class="max-w-xl w-full mx-4 p-6 bg-white rounded-2xl shadow-2xl transition duration-500 transform hover:scale-[1.01]">
+            <!-- Image inserted from your uploaded file. -->
+            <img src="vyy.jpg" 
+                 alt="A beautiful picture of my love" 
+                 class="w-full h-auto object-cover rounded-xl shadow-lg mb-6 max-h-[70vh]">
+            
+            <h2 class="text-2xl font-semibold text-gray-800 mb-2">My Favorite View</h2>
+            <p class="text-gray-600 mb-6">I needed a moment to remind myself (and you) how much I truly cherish you.</p>
+            
+            <button onclick="showPage('photo-page', 'apology-choice-page')" 
+                    class="bg-fuchsia-500 text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-fuchsia-600 transition duration-300 shadow-lg hover:shadow-xl">
+                Continue to the Message 💌
+            </button>
+        </div>
+    </section>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- SCREEN 3: APOLOGY CHOICE PAGE -->
+    <!-- ---------------------------------------------------- -->
+    <section id="apology-choice-page" class="page hidden" style="background-color: #fce7f3;"> <!-- Very light purple/pink background -->
+        <div class="p-8 md:p-12 w-full max-w-4xl">
+            <h1 class="sorry-text mb-4">SORRY</h1>
+            <p class="text-2xl font-medium text-gray-700 mb-12">I know words alone can't fix things, but I hope my commitment to you can.</p>
+
+            <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                <!-- Clickable Button: Apology Accepted -->
+                <button onclick="showPage('apology-choice-page', 'letter-page')" 
+                        class="bg-green-600 text-white px-12 py-4 rounded-xl font-extrabold text-xl shadow-2xl hover:bg-green-700 transition duration-300 transform hover:scale-105">
+                    Apology Accepted ✅
+                </button>
+                
+                <!-- Unclickable Button: Not Accepted (Disabled via CSS class) -->
+                <button class="disabled-button bg-red-600 text-white px-12 py-4 rounded-xl font-extrabold text-xl shadow-2xl" 
+                        title="This button is temporarily disabled.">
+                    Not Accepted ❌
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- SCREEN 4: FINAL LETTER PAGE -->
+    <!-- ---------------------------------------------------- -->
+    <section id="letter-page" class="page hidden overflow-y-auto pt-16 pb-16" style="background-color: #faf5ff;"> <!-- Pale lavender background -->
+        <div class="p-6 md:p-10 w-full max-w-3xl bg-white rounded-3xl shadow-2xl text-left">
+            <h2 class="text-4xl font-serif font-bold text-purple-800 mb-6 border-b pb-3">My Dearest Love,</h2>
+            
+            <div class="text-gray-700 leading-relaxed space-y-4 text-lg">
+                <p>When I look at the gallery of your beautiful face, all I can think about is how lucky I am to have you. You are the light and the strength in my life, and that’s why seeing you hurt, especially because of my actions, is the hardest thing in the world.</p>
+                
+                <p>Please know that my "sorry" is not just a word; it’s a promise. It’s a promise to be more mindful, more patient, and more present. It’s a promise to understand your feelings before focusing on my own. I know I messed up, and there are no excuses for that.</p>
+                
+                <p>What I want you to remember is this: Every mistake I make in this relationship is a lesson learned, and every day is a chance to prove that I am worthy of the extraordinary person you are. I chose you, and I choose you again today, tomorrow, and every day after.</p>
+
+                <p>Thank you for giving me the space and the chance to apologize. Thank you for being the most amazing part of my world. I love you more than I can ever express in a letter, or a thousand clicks.</p>
+                
+                <p class="mt-8 text-xl font-semibold text-right text-purple-900">— Always and Forever Yours,</p>
+                <p class="text-right text-lg text-purple-700 font-medium">Your Name Here</p>
+            </div>
+
+            <div class="mt-10 pt-4 border-t text-center">
+                 <!-- The Messenger link has been set to the URL you provided earlier. -->
+                 <a href="https://www.facebook.com/messages/t/100006366693460" class="inline-block bg-purple-500 text-white px-6 py-2 rounded-full font-semibold hover:bg-purple-600 transition duration-300">
+                    Return to Our Chat 💬
+                </a>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>
